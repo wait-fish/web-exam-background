@@ -86,7 +86,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/deep/ .el-collapse-item .el-collapse-item__header {
+::v-deep .el-collapse-item .el-collapse-item__header {
   font-size: 18px!important;
   font-weight: 550!important;
 }
