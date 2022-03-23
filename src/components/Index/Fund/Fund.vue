@@ -18,47 +18,25 @@
         >
         <el-table-column
           label="日期区间"
-          width="120"
           >
           <template slot-scope="scope">
-            {{scope.row.order_id.split('|')[0]}}至{{scope.row.order_id.split('|')[1]}}
+            <el-tag >{{scope.row.order_id.split('|')[0]}}</el-tag> 至 
+            <el-tag >{{scope.row.order_id.split('|')[1]}}</el-tag>
           </template>
         </el-table-column>
         <el-table-column
           prop="students"
           label="报名人数"
-          width="80"
+          width="90"
           >
         </el-table-column>
         <el-table-column
-          label="报名费（元/人）"
-          width="126"
-          >
-          <template slot-scope="scope">
-            {{scope.row.student_price}}元
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="registery_fee_total"
+          prop="registration_fee_total"
           label="报名总金额（元）"
           width="133"
           >
           <template slot-scope="scope">
-            {{scope.row.registery_fee_total}}元
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="teachers"
-          label="考务人数"
-          width="78"
-          >
-        </el-table-column>
-        <el-table-column
-          label="考务费（元/人）"
-          width="126"
-          >
-          <template slot-scope="scope">
-            {{scope.row.teacher_price}}元
+            {{scope.row.registration_fee_total}}元
           </template>
         </el-table-column>
         <el-table-column
@@ -73,17 +51,23 @@
         <el-table-column
           prop="active"
           label="当前进度"
-          width="105"
+          width="210"
           >
           <template slot-scope="scope">
-            {{activeArr[scope.row.active]}}
+            <el-tag :type="activeArr[scope.row.active].type">
+              {{activeArr[scope.row.active].label}}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column
           label="操作"
-          width="143"
+          width="230"
           >
         <template slot-scope="scope">
+          <el-button 
+          @click="toEditFund('select', scope.row.order_id)" 
+          size="mini" type="success" 
+          >查看</el-button>
           <el-button 
           @click="toEditFund('edit', scope.row.order_id)" 
           size="mini" type="primary" 
@@ -120,10 +104,17 @@ export default {
     return {
       myUser: {},
       funds: [],
-      activeArr: [
-        '学校未汇款',
-        '学校已汇款，工信部未汇款',
-        '已完成'
+      activeArr: [{
+          type: "warning",
+          label: "学校已汇款，工信部未汇款",
+
+        }, {
+          type: "success",
+          label:  "工信部已汇款，财务未分配"
+        }, {
+          type: "info",
+          label: "财务已发配"
+        }
       ],
       order_id: '',
       delDialogVisible: false
@@ -144,6 +135,7 @@ export default {
     async getfunds(year) {
       year = year ? ('?order_id=' + year) : '';
       let { data } = await this.$http.get('/fund' + year);
+      // console.log(data);
       this.funds = data.data
     },
     toEditFund(type, id = '') {

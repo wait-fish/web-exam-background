@@ -30,7 +30,8 @@ import {
   Collapse,
   CollapseItem,
   MessageBox,
-  Image
+  Image,
+  Divider
 } from 'element-ui';
 
 
@@ -62,6 +63,7 @@ Vue.use(DatePicker);
 Vue.use(Collapse);
 Vue.use(CollapseItem);
 Vue.use(Image);
+Vue.use(Divider);
 
 
 Vue.prototype.$message = Message;
